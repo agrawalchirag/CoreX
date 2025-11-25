@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogIn, LayoutDashboard, Wallet } from "lucide-react";
+import { LogIn, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
+import WalletButton from "@/components/WalletButton";
+import WalletConnectModal from "@/components/WalletConnectModal";
+import { useWalletModal } from "@/hooks/useWalletModal";
 
 const Navigation = () => {
   const { isAuthenticated, loading } = useAuth();
-
-  const handleConnectWallet = () => {
-    toast.info("Web3 wallet connection coming soon! Use Demo Login for now.");
-  };
+  const { isOpen, openModal, setOpen } = useWalletModal();
 
   return (
     <nav className="fixed top-0 w-full z-50 glass-effect border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
@@ -49,13 +48,7 @@ const Navigation = () => {
               </Link>
             ) : (
               <>
-                <Button 
-                  onClick={handleConnectWallet}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                >
-                  <Wallet className="mr-2 h-4 w-4" />
-                  Connect Wallet
-                </Button>
+                <WalletButton onClick={openModal} />
                 <Link to="/login">
                   <Button variant="ghost" className="text-white hover:bg-white/10 hidden sm:flex">
                     <LogIn className="mr-2 h-4 w-4" />
@@ -67,6 +60,7 @@ const Navigation = () => {
           </div>
         </div>
       </div>
+      <WalletConnectModal open={isOpen} onOpenChange={setOpen} />
     </nav>
   );
 };

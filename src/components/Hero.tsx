@@ -1,17 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, Shield, Zap, Wallet } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowRight, TrendingUp, Shield, Zap } from "lucide-react";
+import WalletButton from "@/components/WalletButton";
+import WalletConnectModal from "@/components/WalletConnectModal";
+import { useWalletModal } from "@/hooks/useWalletModal";
 
 const Hero = () => {
-  const handleConnectWallet = () => {
-    toast.info("Web3 wallet connection coming soon! Use Demo Login for now.", {
-      action: {
-        label: "Try Demo",
-        onClick: () => window.location.href = "/login",
-      },
-    });
-  };
+  const { isOpen, openModal, setOpen } = useWalletModal();
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -41,14 +36,7 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button 
-              size="lg" 
-              onClick={handleConnectWallet}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/50 text-lg px-8 py-6"
-            >
-              <Wallet className="mr-2 h-5 w-5" />
-              Connect Wallet
-            </Button>
+            <WalletButton size="lg" onClick={openModal} />
             <Link to="/markets">
               <Button size="lg" variant="outline" className="border-slate-700 text-white hover:bg-slate-800/50 text-lg px-8 py-6">
                 Explore DeFi Markets
@@ -85,6 +73,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <WalletConnectModal open={isOpen} onOpenChange={setOpen} />
     </section>
   );
 };
